@@ -10,7 +10,7 @@
 	#include "os.h"
 
 	// 声明本地以下符号是全局的，在其它源文件中可以访问
-	.global _start
+	.global _start, timer_int
 
 	// 指定以下的代码生成16位的机器指令，这样才能在启动时的实模式下运行
   	.code16
@@ -18,7 +18,7 @@
 	// 以下是代码区
  	.text
 _start:
-
+//设置段寄存器
 	mov $0, %ax
 	mov %ax, %ds
 	mov %ax, %es
@@ -40,12 +40,105 @@ read_self_all:
 	int $0x13
 	//读取失败再次读取
 	jc read_self_all
+	//进入保护模式
+	//关中断
+	cli
+	//加载新的GDT表
+	lgdt gdt_desc
+	//加载中断向量表
+	lidt idt_desc
 
-
+	//设置CR0的0位, 操作的时候使用16位的操作寄存器
+	mov $1, %eax
+	lmsw %ax
+	//跳转到内核代码段,进入32位模式,第一个参数是段的地址, 第二个数字是偏移量,也就是C语言程序被复制到的位置
+	jmp $(KERNEL_CODE_SEG),$_start_32
 	jmp .
 
 	//以下是标志位
 	.org 0x1fe				//十进制是510,在这里跳转到对应的位置
 	.byte 0x55, 0xaa
+
+
+
+	//标记下面是32位, 以及是代码段
+	.code32
+	.text
 _start_32:
-	.fill 64*1024, 1, 0x25
+	//在这里设置段地址
+	mov $KERNEL_DATA_SEG, %ax
+	mov %ax, %ds
+	mov %ax, %es
+	mov %ax, %ss
+	mov %ax, %gs
+	mov %ax, %fs
+	mov $_start, %esp
+	//这时候进行初始化时钟, 打开时钟中断,同时设置中断的向量表
+	call os_init
+	//打开页表
+	mov $pg_dir, %eax
+	mov %eax, %cr3
+	//CR4里面有一个位控制是否允许这一个模式 
+	mov %cr4, %eax
+	orl $(1<<4), %eax
+	mov %eax, %cr4
+	//还需要控制PR0最高位w为1
+	mov %cr0, %eax
+	orl $(1<<31), %eax
+	mov %eax, %cr0
+
+	//打开中断, 由于在进入任务的时候会设置IF位, 所以在这里的时候不再进行设置
+	//sti
+	
+	//设置进入低特权级时候的所需要的栈
+	push $APP_DATA_SEG
+	//设置栈的指针
+	push $task0_dpl3_stack + 1024*4
+	//设置EFLAGS, 主要是设置中断的状态
+	push $0			//$0x202
+	//这是代码段
+	push $APP_CODE_SEG
+	push $task_0_entry
+
+	//在这里进入低特权级
+	iret
+	jmp .
+
+//进程0
+task_0_entry:
+	//ss在出栈的时候已经设置了
+	mov %ss, %ax
+	mov %ax, %ds
+	mov %ax, %es
+	mov %ax, %gs
+	mov %ax, %fs
+	jmp .
+
+
+
+//中断处理函数
+timer_int:
+
+	//对寄存器进行保护
+	push %ds
+	pusha
+
+	//清除中断
+	mov $0x20, %al
+	outb %al, $0x20
+	
+	popa
+	pop %ds
+	
+	iret
+
+//这里记录的是GDT表的数据,包括32位的基地址以及16位的大小界限
+gdt_desc:
+	//界限+地址
+	.word (256*8)-1
+	.long gdt_table
+//描述中断的数据
+idt_desc:
+	//界限+地址
+	.word (256*8)-1
+	.long idt_table
