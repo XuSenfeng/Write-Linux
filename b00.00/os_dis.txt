@@ -7,37 +7,40 @@ start address 0x00007c00
 
 Program Header:
     LOAD off    0x00000000 vaddr 0x00007000 paddr 0x00007000 align 2**12
-         filesz 0x00000ff4 memsz 0x00000ff4 flags r-x
-    LOAD off    0x00001000 vaddr 0x00008000 paddr 0x00008000 align 2**12
-         filesz 0x00004000 memsz 0x00005800 flags rw-
+         filesz 0x00001250 memsz 0x00001250 flags r-x
+    LOAD off    0x00002000 vaddr 0x0000a000 paddr 0x0000a000 align 2**12
+         filesz 0x000040f0 memsz 0x00008900 flags rw-
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000039b  00007c00  00007c00  00000c00  2**0
+  0 .text         00000546  00007c00  00007c00  00000c00  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .eh_frame     00000058  00007f9c  00007f9c  00000f9c  2**2
+  1 .rodata       0000001a  00008146  00008146  00001146  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  2 .data         00004000  00008000  00008000  00001000  2**12
+  2 .eh_frame     000000f0  00008160  00008160  00001160  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .data         000040f0  0000a000  0000a000  00002000  2**12
                   CONTENTS, ALLOC, LOAD, DATA
-  3 .bss          00001800  0000c000  0000c000  00005000  2**5
+  4 .bss          00004800  0000e100  0000e100  000060f0  2**5
                   ALLOC
-  4 .comment      00000011  00000000  00000000  00005000  2**0
+  5 .comment      00000011  00000000  00000000  000060f0  2**0
                   CONTENTS, READONLY
-  5 .debug_aranges 00000040  00000000  00000000  00005018  2**3
+  6 .debug_aranges 00000040  00000000  00000000  00006108  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000226  00000000  00000000  00005058  2**0
+  7 .debug_info   0000040a  00000000  00000000  00006148  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000011d  00000000  00000000  0000527e  2**0
+  8 .debug_abbrev 0000014f  00000000  00000000  00006552  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000000d1  00000000  00000000  0000539b  2**0
+  9 .debug_line   0000014f  00000000  00000000  000066a1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000154  00000000  00000000  0000546c  2**0
+ 10 .debug_str    000001e6  00000000  00000000  000067f0  2**0
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00007c00 l    d  .text	00000000 .text
-00007f9c l    d  .eh_frame	00000000 .eh_frame
-00008000 l    d  .data	00000000 .data
-0000c000 l    d  .bss	00000000 .bss
+00008146 l    d  .rodata	00000000 .rodata
+00008160 l    d  .eh_frame	00000000 .eh_frame
+0000a000 l    d  .data	00000000 .data
+0000e100 l    d  .bss	00000000 .bss
 00000000 l    d  .comment	00000000 .comment
 00000000 l    d  .debug_aranges	00000000 .debug_aranges
 00000000 l    d  .debug_info	00000000 .debug_info
@@ -47,23 +50,36 @@ SYMBOL TABLE:
 00000000 l    df *ABS*	00000000 start.o
 00007c13 l       .text	00000000 read_self_all
 00007e00 l       .text	00000000 _start_32
-00007e5d l       .text	00000000 gdt_desc
-00007e63 l       .text	00000000 idt_desc
-00007e47 l       .text	00000000 task_0_entry
+00007e95 l       .text	00000000 gdt_desc
+00007e9b l       .text	00000000 idt_desc
+00007e51 l       .text	00000000 task_0_entry
 00000000 l    df *ABS*	00000000 os.c
-0000a000 l     O .data	00001000 page_table
-00008000 g     O .data	00000800 gdt_table
-0000c000 g     O .bss	00001000 task0_dpl3_stack
-00009000 g     O .data	00001000 map_phy_buffer
-00007e54 g       .text	00000000 timer_int
-00007e88 g     F .text	00000113 os_init
+0000e0e8 l     O .data	00000004 row.1736
+0000c000 l     O .data	00001000 page_table
+0000e0ec l     O .data	00000004 task_tss.1798
+0000a000 g     O .data	00000800 gdt_table
+0000e100 g     O .bss	00001000 task0_dpl3_stack
+0000f100 g     O .bss	00001000 task1_dpl3_stack
+00007f35 g     F .text	0000002e sys_show
+00007f63 g     F .text	0000002c task_0
+0000e000 g     O .data	00000068 task0_tss
+0000b000 g     O .data	00001000 map_phy_buffer
+00007e61 g       .text	00000000 timer_int
+00007fda g     F .text	00000134 os_init
+00010100 g     O .bss	00001000 task1_dpl0_stack
+0000e080 g     O .data	00000068 task1_tss
+00007ea1 g     F .text	00000094 do_syscall
 00007c00 g       .text	00000000 _start
-00007e69 g     F .text	0000001f outb
-0000c000 g       .bss	00000000 __bss_start
-0000b000 g     O .data	00001000 pg_dir
-0000c000 g       .data	00000000 _edata
-0000d800 g       .bss	00000000 _end
-0000d000 g     O .bss	00000800 idt_table
+00007fbb g     F .text	0000001f outb
+0000e0f0 g       .bss	00000000 __bss_start
+0000d000 g     O .data	00001000 pg_dir
+0000e0f0 g       .data	00000000 _edata
+00012900 g       .bss	00000000 _end
+00007e75 g       .text	00000000 syscall_handler
+00007f8f g     F .text	0000002c task_1
+00011100 g     O .bss	00000800 idt_table
+00011900 g     O .bss	00001000 task0_dpl0_stack
+0000810e g     F .text	00000038 task_sched
 
 
 
@@ -116,12 +132,13 @@ read_self_all:
 	//加载新的GDT表
 	lgdt gdt_desc
     7c24:	0f 01 16             	lgdtl  (%esi)
-    7c27:	5d                   	pop    %ebp
+    7c27:	95                   	xchg   %eax,%ebp
     7c28:	7e 0f                	jle    7c39 <read_self_all+0x26>
 	//加载中断向量表
 	lidt idt_desc
     7c2a:	01 1e                	add    %ebx,(%esi)
-    7c2c:	63 7e 66             	arpl   %di,0x66(%esi)
+    7c2c:	9b                   	fwait
+    7c2d:	7e 66                	jle    7c95 <read_self_all+0x82>
 
 	//设置CR0的0位, 操作的时候使用16位的操作寄存器
 	mov $1, %eax
@@ -158,10 +175,10 @@ _start_32:
     7e0e:	bc 00 7c 00 00       	mov    $0x7c00,%esp
 	//这时候进行初始化时钟, 打开时钟中断,同时设置中断的向量表
 	call os_init
-    7e13:	e8 70 00 00 00       	call   7e88 <os_init>
+    7e13:	e8 c2 01 00 00       	call   7fda <os_init>
 	//打开页表
 	mov $pg_dir, %eax
-    7e18:	b8 00 b0 00 00       	mov    $0xb000,%eax
+    7e18:	b8 00 d0 00 00       	mov    $0xd000,%eax
 	mov %eax, %cr3
     7e1d:	0f 22 d8             	mov    %eax,%cr3
 	//CR4里面有一个位控制是否允许这一个模式 
@@ -182,226 +199,467 @@ _start_32:
 	//打开中断, 由于在进入任务的时候会设置IF位, 所以在这里的时候不再进行设置
 	//sti
 	
+	//告诉CPU正在运行的任务
+	mov $TASK0_TSS_SEG, %ax
+    7e34:	66 b8 28 00          	mov    $0x28,%ax
+	ltr %ax
+    7e38:	0f 00 d8             	ltr    %ax
+
+
 	//设置进入低特权级时候的所需要的栈
 	push $APP_DATA_SEG
-    7e34:	6a 23                	push   $0x23
+    7e3b:	6a 23                	push   $0x23
 	//设置栈的指针
 	push $task0_dpl3_stack + 1024*4
-    7e36:	68 00 d0 00 00       	push   $0xd000
+    7e3d:	68 00 f1 00 00       	push   $0xf100
 	//设置EFLAGS, 主要是设置中断的状态
-	push $0			//$0x202
-    7e3b:	6a 00                	push   $0x0
+	push $0x202
+    7e42:	68 02 02 00 00       	push   $0x202
 	//这是代码段
 	push $APP_CODE_SEG
-    7e3d:	6a 1b                	push   $0x1b
+    7e47:	6a 1b                	push   $0x1b
 	push $task_0_entry
-    7e3f:	68 47 7e 00 00       	push   $0x7e47
+    7e49:	68 51 7e 00 00       	push   $0x7e51
 
 	//在这里进入低特权级
 	iret
-    7e44:	cf                   	iret   
+    7e4e:	cf                   	iret   
 	jmp .
-    7e45:	eb fe                	jmp    7e45 <_start_32+0x45>
+    7e4f:	eb fe                	jmp    7e4f <_start_32+0x4f>
 
-00007e47 <task_0_entry>:
+00007e51 <task_0_entry>:
 
 //进程0
 task_0_entry:
 	//ss在出栈的时候已经设置了
 	mov %ss, %ax
-    7e47:	66 8c d0             	mov    %ss,%ax
+    7e51:	66 8c d0             	mov    %ss,%ax
 	mov %ax, %ds
-    7e4a:	8e d8                	mov    %eax,%ds
+    7e54:	8e d8                	mov    %eax,%ds
 	mov %ax, %es
-    7e4c:	8e c0                	mov    %eax,%es
+    7e56:	8e c0                	mov    %eax,%es
 	mov %ax, %gs
-    7e4e:	8e e8                	mov    %eax,%gs
+    7e58:	8e e8                	mov    %eax,%gs
 	mov %ax, %fs
-    7e50:	8e e0                	mov    %eax,%fs
-	jmp .
-    7e52:	eb fe                	jmp    7e52 <task_0_entry+0xb>
+    7e5a:	8e e0                	mov    %eax,%fs
+	jmp task_0
+    7e5c:	e9 02 01 00 00       	jmp    7f63 <task_0>
 
-00007e54 <timer_int>:
+00007e61 <timer_int>:
 
 //中断处理函数
 timer_int:
 
 	//对寄存器进行保护
 	push %ds
-    7e54:	1e                   	push   %ds
+    7e61:	1e                   	push   %ds
 	pusha
-    7e55:	60                   	pusha  
+    7e62:	60                   	pusha  
 
 	//清除中断
 	mov $0x20, %al
-    7e56:	b0 20                	mov    $0x20,%al
+    7e63:	b0 20                	mov    $0x20,%al
 	outb %al, $0x20
-    7e58:	e6 20                	out    %al,$0x20
+    7e65:	e6 20                	out    %al,$0x20
 	
+	mov $KERNEL_DATA_SEG, %ax
+    7e67:	66 b8 10 00          	mov    $0x10,%ax
+	mov %ax, %ds
+    7e6b:	8e d8                	mov    %eax,%ds
+
+	call task_sched
+    7e6d:	e8 9c 02 00 00       	call   810e <task_sched>
+
 	popa
-    7e5a:	61                   	popa   
+    7e72:	61                   	popa   
 	pop %ds
-    7e5b:	1f                   	pop    %ds
+    7e73:	1f                   	pop    %ds
 	
 	iret
-    7e5c:	cf                   	iret   
+    7e74:	cf                   	iret   
 
-00007e5d <gdt_desc>:
-    7e5d:	ff 07                	incl   (%edi)
-    7e5f:	00                   	.byte 0x0
-    7e60:	80 00 00             	addb   $0x0,(%eax)
+00007e75 <syscall_handler>:
 
-00007e63 <idt_desc>:
-    7e63:	ff 07                	incl   (%edi)
-    7e65:	00 d0                	add    %dl,%al
+
+syscall_handler:
+	//对寄存器进行保护
+	push %ds
+    7e75:	1e                   	push   %ds
+	pusha
+    7e76:	60                   	pusha  
+	//使用内核数据段
+	mov $KERNEL_DATA_SEG, %ax
+    7e77:	66 b8 10 00          	mov    $0x10,%ax
+	mov %ax, %ds
+    7e7b:	8e d8                	mov    %eax,%ds
+	//获取传进来的参数, 之后再次入栈
+	mov %esp, %ebp
+    7e7d:	89 e5                	mov    %esp,%ebp
+	push 13*4(%ebp)
+    7e7f:	ff 75 34             	pushl  0x34(%ebp)
+	push 12*4(%ebp)
+    7e82:	ff 75 30             	pushl  0x30(%ebp)
+	push 11*4(%ebp)
+    7e85:	ff 75 2c             	pushl  0x2c(%ebp)
+
+	call do_syscall
+    7e88:	e8 14 00 00 00       	call   7ea1 <do_syscall>
+	add $(3*4), %esp
+    7e8d:	83 c4 0c             	add    $0xc,%esp
+	popa
+    7e90:	61                   	popa   
+	pop %ds
+    7e91:	1f                   	pop    %ds
+	retf $(3*4)
+    7e92:	ca 0c 00             	lret   $0xc
+
+00007e95 <gdt_desc>:
+    7e95:	ff 07                	incl   (%edi)
+    7e97:	00                   	.byte 0x0
+    7e98:	a0                   	.byte 0xa0
 	...
 
-00007e69 <outb>:
-//初始化一个32位的栈, 使用模式为特权级3
-uint32_t task0_dpl3_stack[1024];
+00007e9b <idt_desc>:
+    7e9b:	ff 07                	incl   (%edi)
+    7e9d:	00 11                	add    %dl,(%ecx)
+    7e9f:	01 00                	add    %eax,(%eax)
 
+00007ea1 <do_syscall>:
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+
+//系统调用
+void do_syscall(int func, char * str, char color)
+{
+    7ea1:	55                   	push   %ebp
+    7ea2:	89 e5                	mov    %esp,%ebp
+    7ea4:	83 ec 14             	sub    $0x14,%esp
+    7ea7:	8b 45 10             	mov    0x10(%ebp),%eax
+    7eaa:	88 45 ec             	mov    %al,-0x14(%ebp)
+    static int row=1;
+    if(func==2)
+    7ead:	83 7d 08 02          	cmpl   $0x2,0x8(%ebp)
+    7eb1:	75 7f                	jne    7f32 <do_syscall+0x91>
+    {
+        unsigned short *dest = (unsigned short *)0xb8000 + 80*row;
+    7eb3:	8b 15 e8 e0 00 00    	mov    0xe0e8,%edx
+    7eb9:	89 d0                	mov    %edx,%eax
+    7ebb:	c1 e0 02             	shl    $0x2,%eax
+    7ebe:	01 d0                	add    %edx,%eax
+    7ec0:	c1 e0 05             	shl    $0x5,%eax
+    7ec3:	05 00 80 0b 00       	add    $0xb8000,%eax
+    7ec8:	89 45 fc             	mov    %eax,-0x4(%ebp)
+        while(*str){
+    7ecb:	eb 27                	jmp    7ef4 <do_syscall+0x53>
+            *dest ++ = *str ++ | (color<<8);
+    7ecd:	8b 45 0c             	mov    0xc(%ebp),%eax
+    7ed0:	8d 50 01             	lea    0x1(%eax),%edx
+    7ed3:	89 55 0c             	mov    %edx,0xc(%ebp)
+    7ed6:	0f b6 00             	movzbl (%eax),%eax
+    7ed9:	66 98                	cbtw   
+    7edb:	0f be 55 ec          	movsbl -0x14(%ebp),%edx
+    7edf:	c1 e2 08             	shl    $0x8,%edx
+    7ee2:	09 d0                	or     %edx,%eax
+    7ee4:	89 c1                	mov    %eax,%ecx
+    7ee6:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    7ee9:	8d 50 02             	lea    0x2(%eax),%edx
+    7eec:	89 55 fc             	mov    %edx,-0x4(%ebp)
+    7eef:	89 ca                	mov    %ecx,%edx
+    7ef1:	66 89 10             	mov    %dx,(%eax)
+        while(*str){
+    7ef4:	8b 45 0c             	mov    0xc(%ebp),%eax
+    7ef7:	0f b6 00             	movzbl (%eax),%eax
+    7efa:	84 c0                	test   %al,%al
+    7efc:	75 cf                	jne    7ecd <do_syscall+0x2c>
+        }
+        row = (row>=25)?0:row+1;
+    7efe:	a1 e8 e0 00 00       	mov    0xe0e8,%eax
+    7f03:	83 f8 18             	cmp    $0x18,%eax
+    7f06:	7f 0a                	jg     7f12 <do_syscall+0x71>
+    7f08:	a1 e8 e0 00 00       	mov    0xe0e8,%eax
+    7f0d:	83 c0 01             	add    $0x1,%eax
+    7f10:	eb 05                	jmp    7f17 <do_syscall+0x76>
+    7f12:	b8 00 00 00 00       	mov    $0x0,%eax
+    7f17:	a3 e8 e0 00 00       	mov    %eax,0xe0e8
+        for(int i=0;i<0xffffff;i++);
+    7f1c:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+    7f23:	eb 04                	jmp    7f29 <do_syscall+0x88>
+    7f25:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+    7f29:	81 7d f8 fe ff ff 00 	cmpl   $0xfffffe,-0x8(%ebp)
+    7f30:	7e f3                	jle    7f25 <do_syscall+0x84>
+    }
+    
+}
+    7f32:	90                   	nop
+    7f33:	c9                   	leave  
+    7f34:	c3                   	ret    
+
+00007f35 <sys_show>:
+//这个是打印字符串的函数, 参数是要打印的字符串和显示的颜色,之后会使用系统调用
+void sys_show(char *str, char color)
+{
+    7f35:	55                   	push   %ebp
+    7f36:	89 e5                	mov    %esp,%ebp
+    7f38:	83 ec 14             	sub    $0x14,%esp
+    7f3b:	8b 45 0c             	mov    0xc(%ebp),%eax
+    7f3e:	88 45 ec             	mov    %al,-0x14(%ebp)
+    uint32_t addr[] = {0, SYSCALL_SEG};
+    7f41:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+    7f48:	c7 45 fc 38 00 00 00 	movl   $0x38,-0x4(%ebp)
+
+    __asm__ __volatile__("push %[color];push %[str];push %[id];lcalll *(%[a])"::
+    7f4f:	8d 45 f8             	lea    -0x8(%ebp),%eax
+    7f52:	ba 02 00 00 00       	mov    $0x2,%edx
+    7f57:	ff 75 ec             	pushl  -0x14(%ebp)
+    7f5a:	ff 75 08             	pushl  0x8(%ebp)
+    7f5d:	52                   	push   %edx
+    7f5e:	ff 18                	lcall  *(%eax)
+                    [a]"r"(addr), [color]"m"(color), [str]"m"(str), [id]"r"(2));
+}
+    7f60:	90                   	nop
+    7f61:	c9                   	leave  
+    7f62:	c3                   	ret    
+
+00007f63 <task_0>:
+
+
+//任务1
+void task_0(void)
+{
+    7f63:	55                   	push   %ebp
+    7f64:	89 e5                	mov    %esp,%ebp
+    7f66:	83 ec 10             	sub    $0x10,%esp
+    char * str = "task1 a:1234";
+    7f69:	c7 45 f8 46 81 00 00 	movl   $0x8146,-0x8(%ebp)
+    uint8_t color = 0;
+    7f70:	c6 45 ff 00          	movb   $0x0,-0x1(%ebp)
+
+    for(;;){
+        sys_show(str, color++);
+    7f74:	0f b6 45 ff          	movzbl -0x1(%ebp),%eax
+    7f78:	8d 50 01             	lea    0x1(%eax),%edx
+    7f7b:	88 55 ff             	mov    %dl,-0x1(%ebp)
+    7f7e:	0f be c0             	movsbl %al,%eax
+    7f81:	50                   	push   %eax
+    7f82:	ff 75 f8             	pushl  -0x8(%ebp)
+    7f85:	e8 ab ff ff ff       	call   7f35 <sys_show>
+    7f8a:	83 c4 08             	add    $0x8,%esp
+    7f8d:	eb e5                	jmp    7f74 <task_0+0x11>
+
+00007f8f <task_1>:
+    }
+}
+//任务2
+void task_1(void)
+{
+    7f8f:	55                   	push   %ebp
+    7f90:	89 e5                	mov    %esp,%ebp
+    7f92:	83 ec 10             	sub    $0x10,%esp
+    char * str = "task2 b:5678";
+    7f95:	c7 45 f8 53 81 00 00 	movl   $0x8153,-0x8(%ebp)
+
+    uint8_t color = 0xff;
+    7f9c:	c6 45 ff ff          	movb   $0xff,-0x1(%ebp)
+    for(;;){
+        sys_show(str, color--);
+    7fa0:	0f b6 45 ff          	movzbl -0x1(%ebp),%eax
+    7fa4:	8d 50 ff             	lea    -0x1(%eax),%edx
+    7fa7:	88 55 ff             	mov    %dl,-0x1(%ebp)
+    7faa:	0f be c0             	movsbl %al,%eax
+    7fad:	50                   	push   %eax
+    7fae:	ff 75 f8             	pushl  -0x8(%ebp)
+    7fb1:	e8 7f ff ff ff       	call   7f35 <sys_show>
+    7fb6:	83 c4 08             	add    $0x8,%esp
+    7fb9:	eb e5                	jmp    7fa0 <task_1+0x11>
+
+00007fbb <outb>:
+    // es, cs, ss, ds, fs, gs, ldt, iomap
+    APP_DATA_SEG, APP_CODE_SEG, APP_DATA_SEG, APP_DATA_SEG, APP_DATA_SEG, APP_DATA_SEG, 0x0, 0x0,
+};
 
 //对汇编指令进行一个封装
 void outb(uint8_t data,uint16_t port){
-    7e69:	55                   	push   %ebp
-    7e6a:	89 e5                	mov    %esp,%ebp
-    7e6c:	83 ec 08             	sub    $0x8,%esp
-    7e6f:	8b 55 08             	mov    0x8(%ebp),%edx
-    7e72:	8b 45 0c             	mov    0xc(%ebp),%eax
-    7e75:	88 55 fc             	mov    %dl,-0x4(%ebp)
-    7e78:	66 89 45 f8          	mov    %ax,-0x8(%ebp)
+    7fbb:	55                   	push   %ebp
+    7fbc:	89 e5                	mov    %esp,%ebp
+    7fbe:	83 ec 08             	sub    $0x8,%esp
+    7fc1:	8b 55 08             	mov    0x8(%ebp),%edx
+    7fc4:	8b 45 0c             	mov    0xc(%ebp),%eax
+    7fc7:	88 55 fc             	mov    %dl,-0x4(%ebp)
+    7fca:	66 89 45 f8          	mov    %ax,-0x8(%ebp)
     //这里传入两个数据,第一个数据是data,第二个数据是port,之后进行数据的关联,"d"会识别为%dx,之后会把port放进去
     __asm__ __volatile__("outb %[v], %[p]"::[p]"d"(port), [v]"a"(data));
-    7e7c:	0f b7 55 f8          	movzwl -0x8(%ebp),%edx
-    7e80:	0f b6 45 fc          	movzbl -0x4(%ebp),%eax
-    7e84:	ee                   	out    %al,(%dx)
+    7fce:	0f b7 55 f8          	movzwl -0x8(%ebp),%edx
+    7fd2:	0f b6 45 fc          	movzbl -0x4(%ebp),%eax
+    7fd6:	ee                   	out    %al,(%dx)
 }
-    7e85:	90                   	nop
-    7e86:	c9                   	leave  
-    7e87:	c3                   	ret    
+    7fd7:	90                   	nop
+    7fd8:	c9                   	leave  
+    7fd9:	c3                   	ret    
 
-00007e88 <os_init>:
-
-//在汇编文件中实现的中断处理函数, 在这里进行声明
+00007fda <os_init>:
 void timer_int(void);
+void syscall_handler(void);
+
+
 //初始化一个页表,并在之后设置为0x80000000映射到这一个数组的位置
 void os_init(void){
-    7e88:	55                   	push   %ebp
-    7e89:	89 e5                	mov    %esp,%ebp
-    7e8b:	83 ec 10             	sub    $0x10,%esp
+    7fda:	55                   	push   %ebp
+    7fdb:	89 e5                	mov    %esp,%ebp
+    7fdd:	83 ec 10             	sub    $0x10,%esp
     //初始化定时器
     //初始化中断控制器
     outb(0x11, 0x20);
-    7e8e:	6a 20                	push   $0x20
-    7e90:	6a 11                	push   $0x11
-    7e92:	e8 d2 ff ff ff       	call   7e69 <outb>
-    7e97:	83 c4 08             	add    $0x8,%esp
+    7fe0:	6a 20                	push   $0x20
+    7fe2:	6a 11                	push   $0x11
+    7fe4:	e8 d2 ff ff ff       	call   7fbb <outb>
+    7fe9:	83 c4 08             	add    $0x8,%esp
     outb(0x11, 0xA0);
-    7e9a:	68 a0 00 00 00       	push   $0xa0
-    7e9f:	6a 11                	push   $0x11
-    7ea1:	e8 c3 ff ff ff       	call   7e69 <outb>
-    7ea6:	83 c4 08             	add    $0x8,%esp
+    7fec:	68 a0 00 00 00       	push   $0xa0
+    7ff1:	6a 11                	push   $0x11
+    7ff3:	e8 c3 ff ff ff       	call   7fbb <outb>
+    7ff8:	83 c4 08             	add    $0x8,%esp
     //设置主片的中断起始位置
     outb(0x20, 0x21);
-    7ea9:	6a 21                	push   $0x21
-    7eab:	6a 20                	push   $0x20
-    7ead:	e8 b7 ff ff ff       	call   7e69 <outb>
-    7eb2:	83 c4 08             	add    $0x8,%esp
+    7ffb:	6a 21                	push   $0x21
+    7ffd:	6a 20                	push   $0x20
+    7fff:	e8 b7 ff ff ff       	call   7fbb <outb>
+    8004:	83 c4 08             	add    $0x8,%esp
     //设置从片的中断起始位置
     outb(0x28, 0xa1);
-    7eb5:	68 a1 00 00 00       	push   $0xa1
-    7eba:	6a 28                	push   $0x28
-    7ebc:	e8 a8 ff ff ff       	call   7e69 <outb>
-    7ec1:	83 c4 08             	add    $0x8,%esp
+    8007:	68 a1 00 00 00       	push   $0xa1
+    800c:	6a 28                	push   $0x28
+    800e:	e8 a8 ff ff ff       	call   7fbb <outb>
+    8013:	83 c4 08             	add    $0x8,%esp
     //设置从片连接主片的位置
     outb((1<<2), 0x21);
-    7ec4:	6a 21                	push   $0x21
-    7ec6:	6a 04                	push   $0x4
-    7ec8:	e8 9c ff ff ff       	call   7e69 <outb>
-    7ecd:	83 c4 08             	add    $0x8,%esp
+    8016:	6a 21                	push   $0x21
+    8018:	6a 04                	push   $0x4
+    801a:	e8 9c ff ff ff       	call   7fbb <outb>
+    801f:	83 c4 08             	add    $0x8,%esp
     //设置从片连接主片使用的引脚
     outb(2, 0xa1);
-    7ed0:	68 a1 00 00 00       	push   $0xa1
-    7ed5:	6a 02                	push   $0x2
-    7ed7:	e8 8d ff ff ff       	call   7e69 <outb>
-    7edc:	83 c4 08             	add    $0x8,%esp
+    8022:	68 a1 00 00 00       	push   $0xa1
+    8027:	6a 02                	push   $0x2
+    8029:	e8 8d ff ff ff       	call   7fbb <outb>
+    802e:	83 c4 08             	add    $0x8,%esp
     //设置连接的模式
     outb(0x1,0x21);
-    7edf:	6a 21                	push   $0x21
-    7ee1:	6a 01                	push   $0x1
-    7ee3:	e8 81 ff ff ff       	call   7e69 <outb>
-    7ee8:	83 c4 08             	add    $0x8,%esp
+    8031:	6a 21                	push   $0x21
+    8033:	6a 01                	push   $0x1
+    8035:	e8 81 ff ff ff       	call   7fbb <outb>
+    803a:	83 c4 08             	add    $0x8,%esp
     outb(0x1,0xa1);
-    7eeb:	68 a1 00 00 00       	push   $0xa1
-    7ef0:	6a 01                	push   $0x1
-    7ef2:	e8 72 ff ff ff       	call   7e69 <outb>
-    7ef7:	83 c4 08             	add    $0x8,%esp
+    803d:	68 a1 00 00 00       	push   $0xa1
+    8042:	6a 01                	push   $0x1
+    8044:	e8 72 ff ff ff       	call   7fbb <outb>
+    8049:	83 c4 08             	add    $0x8,%esp
     //设置中断的屏蔽
     outb(0xfe,0x21);    //只有最低的中断也就是时钟中断没有被屏蔽
-    7efa:	6a 21                	push   $0x21
-    7efc:	68 fe 00 00 00       	push   $0xfe
-    7f01:	e8 63 ff ff ff       	call   7e69 <outb>
-    7f06:	83 c4 08             	add    $0x8,%esp
+    804c:	6a 21                	push   $0x21
+    804e:	68 fe 00 00 00       	push   $0xfe
+    8053:	e8 63 ff ff ff       	call   7fbb <outb>
+    8058:	83 c4 08             	add    $0x8,%esp
     outb(0xff,0xa1);
-    7f09:	68 a1 00 00 00       	push   $0xa1
-    7f0e:	68 ff 00 00 00       	push   $0xff
-    7f13:	e8 51 ff ff ff       	call   7e69 <outb>
-    7f18:	83 c4 08             	add    $0x8,%esp
+    805b:	68 a1 00 00 00       	push   $0xa1
+    8060:	68 ff 00 00 00       	push   $0xff
+    8065:	e8 51 ff ff ff       	call   7fbb <outb>
+    806a:	83 c4 08             	add    $0x8,%esp
     //配置外部时钟源,是一个16位的计数器,减到0的时候会产生中断,这里计算每秒产生100次中断大概需要的数值
     int tmo = 1193180 / 100;
-    7f1b:	c7 45 fc 9b 2e 00 00 	movl   $0x2e9b,-0x4(%ebp)
+    806d:	c7 45 fc 9b 2e 00 00 	movl   $0x2e9b,-0x4(%ebp)
     //写入数值
     //设置使用的时钟以及自动加载
     outb(0x36, 0x43);
-    7f22:	6a 43                	push   $0x43
-    7f24:	6a 36                	push   $0x36
-    7f26:	e8 3e ff ff ff       	call   7e69 <outb>
-    7f2b:	83 c4 08             	add    $0x8,%esp
+    8074:	6a 43                	push   $0x43
+    8076:	6a 36                	push   $0x36
+    8078:	e8 3e ff ff ff       	call   7fbb <outb>
+    807d:	83 c4 08             	add    $0x8,%esp
     //中断频率的设置
     outb((uint8_t)tmo, 0x40);
-    7f2e:	8b 45 fc             	mov    -0x4(%ebp),%eax
-    7f31:	0f b6 c0             	movzbl %al,%eax
-    7f34:	6a 40                	push   $0x40
-    7f36:	50                   	push   %eax
-    7f37:	e8 2d ff ff ff       	call   7e69 <outb>
-    7f3c:	83 c4 08             	add    $0x8,%esp
+    8080:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    8083:	0f b6 c0             	movzbl %al,%eax
+    8086:	6a 40                	push   $0x40
+    8088:	50                   	push   %eax
+    8089:	e8 2d ff ff ff       	call   7fbb <outb>
+    808e:	83 c4 08             	add    $0x8,%esp
     outb(tmo>>8, 0x40);
-    7f3f:	8b 45 fc             	mov    -0x4(%ebp),%eax
-    7f42:	c1 f8 08             	sar    $0x8,%eax
-    7f45:	0f b6 c0             	movzbl %al,%eax
-    7f48:	6a 40                	push   $0x40
-    7f4a:	50                   	push   %eax
-    7f4b:	e8 19 ff ff ff       	call   7e69 <outb>
-    7f50:	83 c4 08             	add    $0x8,%esp
+    8091:	8b 45 fc             	mov    -0x4(%ebp),%eax
+    8094:	c1 f8 08             	sar    $0x8,%eax
+    8097:	0f b6 c0             	movzbl %al,%eax
+    809a:	6a 40                	push   $0x40
+    809c:	50                   	push   %eax
+    809d:	e8 19 ff ff ff       	call   7fbb <outb>
+    80a2:	83 c4 08             	add    $0x8,%esp
     //记录中断处理函数的地址
     idt_table[0x20].offset_l = (uint32_t)timer_int & 0xffff;
-    7f53:	b8 54 7e 00 00       	mov    $0x7e54,%eax
-    7f58:	66 a3 00 d1 00 00    	mov    %ax,0xd100
+    80a5:	b8 61 7e 00 00       	mov    $0x7e61,%eax
+    80aa:	66 a3 00 12 01 00    	mov    %ax,0x11200
     idt_table[0x20].offset_h = (uint32_t)timer_int >> 16;
-    7f5e:	b8 54 7e 00 00       	mov    $0x7e54,%eax
-    7f63:	c1 e8 10             	shr    $0x10,%eax
-    7f66:	66 a3 06 d1 00 00    	mov    %ax,0xd106
+    80b0:	b8 61 7e 00 00       	mov    $0x7e61,%eax
+    80b5:	c1 e8 10             	shr    $0x10,%eax
+    80b8:	66 a3 06 12 01 00    	mov    %ax,0x11206
     idt_table[0x20].selector = KERNEL_CODE_SEG;
-    7f6c:	66 c7 05 02 d1 00 00 	movw   $0x8,0xd102
-    7f73:	08 00 
+    80be:	66 c7 05 02 12 01 00 	movw   $0x8,0x11202
+    80c5:	08 00 
     //设置为中断门,32位模式
     idt_table[0x20].attr = 0x8e00;
-    7f75:	66 c7 05 04 d1 00 00 	movw   $0x8e00,0xd104
-    7f7c:	00 8e 
+    80c7:	66 c7 05 04 12 01 00 	movw   $0x8e00,0x11204
+    80ce:	00 8e 
 
+    //设置两个任务控制段的地址
+    gdt_table[TASK0_TSS_SEG / 8].base_l = (uint16_t)(uint32_t)task0_tss;
+    80d0:	b8 00 e0 00 00       	mov    $0xe000,%eax
+    80d5:	66 a3 2a a0 00 00    	mov    %ax,0xa02a
+    gdt_table[TASK1_TSS_SEG / 8].base_l = (uint16_t)(uint32_t)task1_tss;
+    80db:	b8 80 e0 00 00       	mov    $0xe080,%eax
+    80e0:	66 a3 32 a0 00 00    	mov    %ax,0xa032
+    //设置系统调用函数的地址
+    gdt_table[SYSCALL_SEG / 8].limit_l = (uint16_t)(uint32_t)syscall_handler;
+    80e6:	b8 75 7e 00 00       	mov    $0x7e75,%eax
+    80eb:	66 a3 38 a0 00 00    	mov    %ax,0xa038
 
 
     //设置一级表,使用的是表的高10位
     pg_dir[MAG_ADDR>>22] = (uint32_t)page_table | PDE_P | PDE_W | PDE_U;
-    7f7e:	b8 00 a0 00 00       	mov    $0xa000,%eax
-    7f83:	83 c8 07             	or     $0x7,%eax
-    7f86:	a3 00 b8 00 00       	mov    %eax,0xb800
+    80f1:	b8 00 c0 00 00       	mov    $0xc000,%eax
+    80f6:	83 c8 07             	or     $0x7,%eax
+    80f9:	a3 00 d8 00 00       	mov    %eax,0xd800
     //初始化表的二级,这里是实际的地址,之后需要设置对应的位置
     page_table[(MAG_ADDR>>12)&0x3ff] = (uint32_t)map_phy_buffer | PDE_P | PDE_W | PDE_U;
-    7f8b:	b8 00 90 00 00       	mov    $0x9000,%eax
-    7f90:	83 c8 07             	or     $0x7,%eax
-    7f93:	a3 00 a0 00 00       	mov    %eax,0xa000
+    80fe:	b8 00 b0 00 00       	mov    $0xb000,%eax
+    8103:	83 c8 07             	or     $0x7,%eax
+    8106:	a3 00 c0 00 00       	mov    %eax,0xc000
 }
-    7f98:	90                   	nop
-    7f99:	c9                   	leave  
-    7f9a:	c3                   	ret    
+    810b:	90                   	nop
+    810c:	c9                   	leave  
+    810d:	c3                   	ret    
+
+0000810e <task_sched>:
+
+
+
+void task_sched(void){
+    810e:	55                   	push   %ebp
+    810f:	89 e5                	mov    %esp,%ebp
+    8111:	83 ec 10             	sub    $0x10,%esp
+    static int task_tss = TASK0_TSS_SEG;
+    
+    task_tss = (task_tss == TASK0_TSS_SEG) ? TASK1_TSS_SEG : TASK0_TSS_SEG;
+    8114:	a1 ec e0 00 00       	mov    0xe0ec,%eax
+    8119:	83 f8 28             	cmp    $0x28,%eax
+    811c:	75 07                	jne    8125 <task_sched+0x17>
+    811e:	b8 30 00 00 00       	mov    $0x30,%eax
+    8123:	eb 05                	jmp    812a <task_sched+0x1c>
+    8125:	b8 28 00 00 00       	mov    $0x28,%eax
+    812a:	a3 ec e0 00 00       	mov    %eax,0xe0ec
+    uint32_t addr[] = {0, task_tss};
+    812f:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+    8136:	a1 ec e0 00 00       	mov    0xe0ec,%eax
+    813b:	89 45 fc             	mov    %eax,-0x4(%ebp)
+    __asm__ __volatile__("ljmpl *(%[a])"::[a]"r"(addr));
+    813e:	8d 45 f8             	lea    -0x8(%ebp),%eax
+    8141:	ff 28                	ljmp   *(%eax)
+}
+    8143:	90                   	nop
+    8144:	c9                   	leave  
+    8145:	c3                   	ret    

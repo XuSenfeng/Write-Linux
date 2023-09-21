@@ -12,6 +12,53 @@
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
+
+//系统调用
+void do_syscall(int func, char * str, char color)
+{
+    static int row=1;
+    if(func==2)
+    {
+        unsigned short *dest = (unsigned short *)0xb8000 + 80*row;
+        while(*str){
+            *dest ++ = *str ++ | (color<<8);
+        }
+        row = (row>=25)?0:row+1;
+        for(int i=0;i<0xffffff;i++);
+    }
+    
+}
+//这个是打印字符串的函数, 参数是要打印的字符串和显示的颜色,之后会使用系统调用
+void sys_show(char *str, char color)
+{
+    uint32_t addr[] = {0, SYSCALL_SEG};
+
+    __asm__ __volatile__("push %[color];push %[str];push %[id];lcalll *(%[a])"::
+                    [a]"r"(addr), [color]"m"(color), [str]"m"(str), [id]"r"(2));
+}
+
+
+//任务1
+void task_0(void)
+{
+    char * str = "task1 a:1234";
+    uint8_t color = 0;
+
+    for(;;){
+        sys_show(str, color++);
+    }
+}
+//任务2
+void task_1(void)
+{
+    char * str = "task2 b:5678";
+
+    uint8_t color = 0xff;
+    for(;;){
+        sys_show(str, color--);
+    }
+}
+
 //这一个表需要进行八字节对齐
 struct {uint16_t limit_l, base_l, basehl_attr, base_limit;}gdt_table[256] __attribute__((aligned(8))) = {
     // 0x00cf9a000000ffff - 从0地址开始，P存在，DPL=0，Type=非系统段，32位代码段（非一致代码段），界限4G，
@@ -22,6 +69,13 @@ struct {uint16_t limit_l, base_l, basehl_attr, base_limit;}gdt_table[256] __attr
     [APP_CODE_SEG /8] = {0xffff, 0x0000, 0xfa00, 0x00cf},
     //设置为可读可写可访问
     [APP_DATA_SEG /8] = {0xffff, 0x0000, 0xf300, 0x00cf},
+    //TSS表, 由于直接使用一个数组作为TSS会导致报错,这里基地址初始化为0
+    [TASK0_TSS_SEG /8] = {0x68, 0, 0xe900, 0},
+    [TASK1_TSS_SEG /8] = {0x68, 0, 0xe900, 0},
+    //这里是系统调用,首先不初始化任务的函数地址, 之后是代码段, 权限设置为3
+    [SYSCALL_SEG / 8] = {0x0000, KERNEL_CODE_SEG, 0xec03, 0},
+
+
 };
 //这个表是否有效
 #define PDE_P                   (1<<0)
@@ -45,9 +99,31 @@ uint32_t pg_dir[1024] __attribute__((aligned(4096))) = {
 
 //中断向量表
 struct {uint16_t offset_l, selector, attr, offset_h;}idt_table[256] __attribute__((aligned(8)));
+
 //初始化一个32位的栈, 使用模式为特权级3
 uint32_t task0_dpl3_stack[1024];
+uint32_t task1_dpl3_stack[1024];
+uint32_t task0_dpl0_stack[1024];
+uint32_t task1_dpl0_stack[1024];
 
+//定义一个TSS结构, 这个是任务一的表
+uint32_t task0_tss[] = {
+    // prelink, esp0, ss0, esp1, ss1, esp2, ss2
+    0,  (uint32_t)task0_dpl0_stack + 4*1024, KERNEL_DATA_SEG , /* 后边不用使用 */ 0x0, 0x0, 0x0, 0x0,
+    // cr3, eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi,
+    (uint32_t)pg_dir,  (uint32_t)task_0/*入口地址*/, 0x202, 0xa, 0xc, 0xd, 0xb, (uint32_t)task0_dpl3_stack + 4*1024/* 栈 */, 0x1, 0x2, 0x3,
+    // es, cs, ss, ds, fs, gs, ldt, iomap
+    APP_DATA_SEG, APP_CODE_SEG, APP_DATA_SEG, APP_DATA_SEG, APP_DATA_SEG, APP_DATA_SEG, 0x0, 0x0,
+};
+//这个是任务二的表
+uint32_t task1_tss[] = {
+    // prelink, esp0, ss0, esp1, ss1, esp2, ss2
+    0,  (uint32_t)task1_dpl0_stack + 4*1024, KERNEL_DATA_SEG , /* 后边不用使用 */ 0x0, 0x0, 0x0, 0x0,
+    // cr3, eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi,
+    (uint32_t)pg_dir,  (uint32_t)task_1/*入口地址*/, 0x202, 0xa, 0xc, 0xd, 0xb, (uint32_t)task1_dpl3_stack + 4*1024/* 栈 */, 0x1, 0x2, 0x3,
+    // es, cs, ss, ds, fs, gs, ldt, iomap
+    APP_DATA_SEG, APP_CODE_SEG, APP_DATA_SEG, APP_DATA_SEG, APP_DATA_SEG, APP_DATA_SEG, 0x0, 0x0,
+};
 
 //对汇编指令进行一个封装
 void outb(uint8_t data,uint16_t port){
@@ -57,6 +133,9 @@ void outb(uint8_t data,uint16_t port){
 
 //在汇编文件中实现的中断处理函数, 在这里进行声明
 void timer_int(void);
+void syscall_handler(void);
+
+
 //初始化一个页表,并在之后设置为0x80000000映射到这一个数组的位置
 void os_init(void){
     //初始化定时器
@@ -92,6 +171,11 @@ void os_init(void){
     //设置为中断门,32位模式
     idt_table[0x20].attr = 0x8e00;
 
+    //设置两个任务控制段的地址
+    gdt_table[TASK0_TSS_SEG / 8].base_l = (uint16_t)(uint32_t)task0_tss;
+    gdt_table[TASK1_TSS_SEG / 8].base_l = (uint16_t)(uint32_t)task1_tss;
+    //设置系统调用函数的地址
+    gdt_table[SYSCALL_SEG / 8].limit_l = (uint16_t)(uint32_t)syscall_handler;
 
 
     //设置一级表,使用的是表的高10位
@@ -101,8 +185,13 @@ void os_init(void){
 }
 
 
-
-
-
-
+//进行任务的切换
+void task_sched(void){
+    static int task_tss = TASK0_TSS_SEG;
+    
+    task_tss = (task_tss == TASK0_TSS_SEG) ? TASK1_TSS_SEG : TASK0_TSS_SEG;
+    //设置为没有偏移跳转到新的任务段
+    uint32_t addr[] = {0, task_tss};
+    __asm__ __volatile__("ljmpl *(%[a])"::[a]"r"(addr));
+}
 

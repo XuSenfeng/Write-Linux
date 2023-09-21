@@ -10,7 +10,7 @@
 	#include "os.h"
 
 	// 声明本地以下符号是全局的，在其它源文件中可以访问
-	.global _start, timer_int
+	.global _start, timer_int, syscall_handler
 
 	// 指定以下的代码生成16位的机器指令，这样才能在启动时的实模式下运行
   	.code16
@@ -90,12 +90,17 @@ _start_32:
 	//打开中断, 由于在进入任务的时候会设置IF位, 所以在这里的时候不再进行设置
 	//sti
 	
+	//告诉CPU正在运行的任务
+	mov $TASK0_TSS_SEG, %ax
+	ltr %ax
+
+
 	//设置进入低特权级时候的所需要的栈
 	push $APP_DATA_SEG
 	//设置栈的指针
 	push $task0_dpl3_stack + 1024*4
 	//设置EFLAGS, 主要是设置中断的状态
-	push $0			//$0x202
+	push $0x202
 	//这是代码段
 	push $APP_CODE_SEG
 	push $task_0_entry
@@ -104,7 +109,7 @@ _start_32:
 	iret
 	jmp .
 
-//进程0
+//进程0, 设置完栈以后会进入任务0里面
 task_0_entry:
 	//ss在出栈的时候已经设置了
 	mov %ss, %ax
@@ -112,11 +117,11 @@ task_0_entry:
 	mov %ax, %es
 	mov %ax, %gs
 	mov %ax, %fs
-	jmp .
+	jmp task_0
 
 
 
-//中断处理函数
+//中断处理函数, 会在这里进行任务的切换
 timer_int:
 
 	//对寄存器进行保护
@@ -127,12 +132,38 @@ timer_int:
 	mov $0x20, %al
 	outb %al, $0x20
 	
+	mov $KERNEL_DATA_SEG, %ax
+	mov %ax, %ds
+
+	call task_sched
+
 	popa
 	pop %ds
 	
 	iret
 
-//这里记录的是GDT表的数据,包括32位的基地址以及16位的大小界限
+//这里是系统调用使用的代码段
+syscall_handler:
+	//对寄存器进行保护
+	push %ds
+	pusha
+	//使用内核数据段, 会在之后的pop的时候进行复原
+	mov $KERNEL_DATA_SEG, %ax
+	mov %ax, %ds
+	//获取传进来的参数, 之后再次入栈
+	mov %esp, %ebp
+	push 13*4(%ebp)
+	push 12*4(%ebp)
+	push 11*4(%ebp)
+
+	call do_syscall
+	add $(3*4), %esp
+	popa
+	pop %ds
+	retf $(3*4)
+
+
+//这里记录的是GDT表的数据,包括32位的基地址以及16位的大小界限,是用来设置时候的任务类型
 gdt_desc:
 	//界限+地址
 	.word (256*8)-1
