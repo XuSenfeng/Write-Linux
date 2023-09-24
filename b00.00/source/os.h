@@ -12,13 +12,24 @@
 // 各选择子
 #define KERNEL_CODE_SEG         (1 * 8)
 #define KERNEL_DATA_SEG         (2 * 8)
-//任务段, 设置任务等级为3
+//任务段, 设置任务等级为3  之后由于使用LDT便不再使用
 #define APP_CODE_SEG            ((3 * 8) | 3)
 #define APP_DATA_SEG            ((4 * 8) | 3)
 
+//任务的TSS保存位置
 #define TASK0_TSS_SEG           ((5 * 8))
 #define TASK1_TSS_SEG           ((6 * 8))
-
+//系统调用
 #define SYSCALL_SEG             ((7 * 8))
+//保存两个LDT的描述
+#define TASK0_LDT_SEG           ((8 * 8))
+#define TASK1_LDT_SEG           ((9 * 8))
+
+
+//这里是任务的LDT的配置
+#define TASK_CODE_SEG           (0 * 8 | 0x4 | 3)
+#define TASK_DATA_SEG           (1 * 8 | 0x4 | 3)
+
+
 
 #endif // OS_H

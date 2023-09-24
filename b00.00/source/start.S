@@ -94,15 +94,17 @@ _start_32:
 	mov $TASK0_TSS_SEG, %ax
 	ltr %ax
 
-
+	//设置任务的LDT
+	mov $TASK0_LDT_SEG, %ax
+	lldt %ax
 	//设置进入低特权级时候的所需要的栈
-	push $APP_DATA_SEG
+	push $TASK_DATA_SEG
 	//设置栈的指针
 	push $task0_dpl3_stack + 1024*4
 	//设置EFLAGS, 主要是设置中断的状态
 	push $0x202
 	//这是代码段
-	push $APP_CODE_SEG
+	push $TASK_CODE_SEG
 	push $task_0_entry
 
 	//在这里进入低特权级
