@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/boot.h
+
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/start.S
+boot.h
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/boot.h
+

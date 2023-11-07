@@ -1,0 +1,37 @@
+[
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/boot",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -m32 -g -g -o CMakeFiles/boot.dir/start.S.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/start.S",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/start.S"
+},
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/boot",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -g -c -O0 -m32 -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -g -o CMakeFiles/boot.dir/boot.c.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/boot.c",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/boot/boot.c"
+},
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/loader",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -m32 -g -g -o CMakeFiles/loader.dir/start.S.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/loader/start.S",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/loader/start.S"
+},
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/loader",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -g -c -O0 -m32 -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -g -o CMakeFiles/loader.dir/loader_16.c.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/loader/loader_16.c",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/loader/loader_16.c"
+},
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/loader",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -g -c -O0 -m32 -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -g -o CMakeFiles/loader.dir/loader_32.c.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/loader/loader_32.c",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/loader/loader_32.c"
+},
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/kernel",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -m32 -g -g -o CMakeFiles/kernel.dir/init/start.S.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/kernel/init/start.S",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/kernel/init/start.S"
+},
+{
+  "directory": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/kernel",
+  "command": "C:/x86_64-elf-tools-windows/bin/x86_64-elf-gcc.exe  -IE:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source -g -c -O0 -m32 -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -g -o CMakeFiles/kernel.dir/init/init.c.obj -c E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/kernel/init/init.c",
+  "file": "E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/source/kernel/init/init.c"
+}
+]

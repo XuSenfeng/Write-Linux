@@ -1,0 +1,1 @@
+x86_64-elf-ld @CMakeFiles\loader.dir\objects1.rsp -m elf_i386 -Ttext=0x8000 -o E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/start-test/build/source/loader/loader.elf

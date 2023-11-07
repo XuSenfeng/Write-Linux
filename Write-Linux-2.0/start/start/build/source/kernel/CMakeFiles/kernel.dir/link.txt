@@ -1,0 +1,1 @@
+x86_64-elf-ld @CMakeFiles\kernel.dir\objects1.rsp -m elf_i386 -T E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/start/source/kernel/kernel.lds -o E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/start/build/source/kernel/kernel.elf

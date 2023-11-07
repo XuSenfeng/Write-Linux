@@ -1,0 +1,1 @@
+x86_64-elf-ld @CMakeFiles\boot.dir\objects1.rsp -m elf_i386  -Ttext=0x7c00  --section-start boot_end=0x7dfe -o E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/start-test/build/source/boot/boot.elf

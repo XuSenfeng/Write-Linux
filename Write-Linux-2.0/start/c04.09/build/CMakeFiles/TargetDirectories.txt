@@ -1,0 +1,11 @@
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/CMakeFiles/edit_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/CMakeFiles/rebuild_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/boot/CMakeFiles/boot.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/boot/CMakeFiles/edit_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/boot/CMakeFiles/rebuild_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/loader/CMakeFiles/loader.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/loader/CMakeFiles/edit_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/loader/CMakeFiles/rebuild_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/kernel/CMakeFiles/kernel.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/kernel/CMakeFiles/edit_cache.dir
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/c04.09/build/source/kernel/CMakeFiles/rebuild_cache.dir

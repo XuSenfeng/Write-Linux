@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../source/kernel/include/os_cfg.h
+
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/start/source/kernel/init/start.S
+os_cfg.h
+E:/JHY/Write-Linux-lishutong/Write-Linux-2.0/start/start/source/kernel/init/os_cfg.h
+
